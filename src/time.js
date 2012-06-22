@@ -24,11 +24,13 @@ var Timeline = function(args){
 
                 accumulator += frametime;
 
-                fastest(frametime, frames);
+                if(typeof fastest !== 'undefined')
+                    fastest(frametime, frames);
 
                 while (accumulator >= dt_target) {
                     accumulator -= dt_target;
-                    controlled(dt_target, frames);
+                    if(typeof controlled !== 'undefined')
+                        controlled(dt_target, frames);
                 }
 
                 _loop(dt);

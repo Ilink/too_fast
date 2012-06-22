@@ -4,10 +4,10 @@
 <head>
     <title>Slippery!</title>
     <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>-->
-    <script src="lib/jquery-1.7.2.min.js"></script>
-    <script src="mouse.js"></script>
-    <script src="time.js"></script>
-    <script src="main.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="../src/mouse.js"></script>
+    <script src="../src/time.js"></script>
+    <script src="test.js"></script>
 
     <!-- style -->
     <link rel="stylesheet" href="style.css">
@@ -20,9 +20,10 @@
     <div id="container"></div>
 
     <div>velocity: <span id="vel"></span></div>
-    <div>old pos: <span id="old_pos"></span></div>
+    <div>fastest velocity: <span id="fastest_vel"></span></div>
     <div>current pos: <span id="pos"></span></div>
-    <canvas id="display_canvas" width="200px" height="200px"></canvas>
+    <!--<canvas id="display_canvas" width="200px" height="200px"></canvas>-->
+    <div id="display_canvas" ></div>
 
     <div><a id="start">Start</a></div>
     <div><a id="stop">Stop</a></div>

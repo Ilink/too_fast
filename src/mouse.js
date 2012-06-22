@@ -9,39 +9,59 @@ And then I need to figure out how to integrate it with the timeline
 var Mouse = function(options){
     var self = this;
 
-    var old_x, x, old_y, y, selector, replace_old_positions;
+    var old_x, x, old_y, y, $selector, replace_old_positions;
+
+
+    var fastest_x = 0;
+    var fastest_y = 0;
     replace_old_positions = true;
 
-    selector = $(options.selector);
+//    $selector = $(options.selector);
 
     var measure_velocity = function(dt){
         replace_old_positions = true;
         var velocity_x = Math.abs(old_x - x) / dt;
         var velocity_y = Math.abs(old_y - y) / dt;
-//        console.log([velocity_x, velocity_y]);
+        if(velocity_x > fastest_x){
+            fastest_x = velocity_x;
+        }
+        if(velocity_y > fastest_y){
+            fastest_y = velocity_y;
+        }
+
+
         $('#vel').empty().append(velocity_x + ", " + velocity_y);
-        $('#pos_old').empty().append(old_x + ", " + old_y);
+        $("#fastest_vel").empty().append(fastest_x + ", " + fastest_y);
         $('#pos').empty().append(x + ", " + y);
         return [velocity_x, velocity_y];
     }
 
+    var measure_acceleration = function(){
+
+    }
+
     $("#display_canvas").mousemove(function(e){
-        if(replace_old_positions){
-            x = e.offsetX;
-            y = e.offsetY;
-            old_x = x;
-            old_y = y;
-            replace_old_positions = false;
-        } else {
-            x = e.offsetX;
-            y = e.offsetY;
-        }
+        old_x = x;
+        old_y = y;
+        x = e.offsetX;
+        y = e.offsetY;
+
+//        if(replace_old_positions){
+////            x = e.offsetX;
+////            y = e.offsetY;
+//            old_x = x;
+//            old_y = y;
+//            replace_old_positions = false;
+//        } else {
+//            x = e.offsetX;
+//            y = e.offsetY;
+//        }
 
     });
 
     var timeline = new Timeline({
         tickrate: 100,
-        callback: function(dt){ // render loop goes here
+        fastest: function(dt){ // render loop goes here
             measure_velocity(dt);
             replace_old_positions = true;
         }
