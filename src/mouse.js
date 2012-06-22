@@ -9,7 +9,7 @@ And then I need to figure out how to integrate it with the timeline
 var Mouse = function(options){
     var self = this;
 
-    var old_x, x, old_y, y, $selector, replace_old_positions;
+    var old_x, x, old_y, y, $selector, replace_old_positions, velocity_y, velocity_x;
 
 
     var fastest_x = 0;
@@ -20,8 +20,8 @@ var Mouse = function(options){
 
     var measure_velocity = function(dt){
         replace_old_positions = true;
-        var velocity_x = Math.abs(old_x - x) / dt;
-        var velocity_y = Math.abs(old_y - y) / dt;
+        velocity_x = Math.abs(old_x - x) / dt;
+        velocity_y = Math.abs(old_y - y) / dt;
         if(velocity_x > fastest_x){
             fastest_x = velocity_x;
         }
@@ -40,7 +40,7 @@ var Mouse = function(options){
 
     }
 
-    $("#display_canvas").mousemove(function(e){
+    $("body").mousemove(function(e){
         old_x = x;
         old_y = y;
         x = e.offsetX;
@@ -80,7 +80,7 @@ var Mouse = function(options){
     }
 
     this.get_velocity = function(){
-
+        return [velocity_x, velocity_y];
     }
 
 
