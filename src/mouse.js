@@ -1,34 +1,32 @@
 /*
-I might just look for someone else's library to handle this stuff
-
-    - mouse velocity
-    - position
-
-And then I need to figure out how to integrate it with the timeline
+Mouse.js
+Measures velocity, acceleration.
  */
 var Mouse = function(options){
     var self = this;
+    var old_x, x, old_y, y, $selector, replace_old_positions, velocity_y, velocity_x, acc_x, acc_y, old_velocity_y, old_velocity_x, fastest_acc_x, fastest_acc_y, fastest_x, fastest_y, intervals;
 
-    var old_x, x, old_y, y, $selector, replace_old_positions, velocity_y, velocity_x;
-
-
-    var fastest_x = 0;
-    var fastest_y = 0;
+    fastest_x = 0, fastest_y = 0, fastest_acc_x = 0, fastest_acc_y = 0;
     replace_old_positions = true;
 
 //    $selector = $(options.selector);
 
+    // todo break this into the only thing - it shouldnt be printing data from here!
     var measure_velocity = function(dt){
         replace_old_positions = true;
+
+        old_velocity_x = velocity_x;
+        old_velocity_y = velocity_y;
+
         velocity_x = Math.abs(old_x - x) / dt;
         velocity_y = Math.abs(old_y - y) / dt;
+
         if(velocity_x > fastest_x){
             fastest_x = velocity_x;
         }
         if(velocity_y > fastest_y){
             fastest_y = velocity_y;
         }
-
 
         $('#vel').empty().append(velocity_x + ", " + velocity_y);
         $("#fastest_vel").empty().append(fastest_x + ", " + fastest_y);
@@ -37,45 +35,54 @@ var Mouse = function(options){
     }
 
     var measure_acceleration = function(){
+        acc_y = old_velocity_y - velocity_y;
+        acc_x = old_velocity_x - velocity_x;
 
+        if(fastest_acc_x < acc_x){
+            fastest_acc_x = acc_x;
+        }
+
+        if(fastest_acc_y < acc_y){
+            fastest_acc_y = acc_y;
+        }
+
+        $('#acc').empty().append(acc_x + ", " + acc_y);
+        $('#fastest_acc').empty().append(fastest_acc_x + ", " + fastest_acc_y);
+        return [acc_x, acc_y];
     }
 
-    $("body").mousemove(function(e){
+    $(window).mousemove(function(e){
         old_x = x;
         old_y = y;
         x = e.offsetX;
         y = e.offsetY;
-
-//        if(replace_old_positions){
-////            x = e.offsetX;
-////            y = e.offsetY;
-//            old_x = x;
-//            old_y = y;
-//            replace_old_positions = false;
-//        } else {
-//            x = e.offsetX;
-//            y = e.offsetY;
-//        }
-
     });
+
+    // uses the previous average to calculate a new one
+    function avg(n, prev, val){
+        return (((n-1) * prev) + val) / n;
+    }
 
     var timeline = new Timeline({
         tickrate: 100,
         fastest: function(dt){ // render loop goes here
             measure_velocity(dt);
+            measure_acceleration();
             replace_old_positions = true;
+            intervals++;
+            // time += dt;
         }
     });
+
+    // Public
 
     this.velocity = 0;
 
     this.start_measuring = function(){
-        // start timeline
         timeline.start();
     }
 
     this.end_measuring = function(){
-        // stop timeline
         timeline.stop();
     }
 
