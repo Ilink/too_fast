@@ -4,9 +4,10 @@ Measures velocity, acceleration.
  */
 var Mouse = function(options){
     var self = this;
-    var old_x, x, old_y, y, $selector, replace_old_positions, velocity_y, velocity_x, acc_x, acc_y, old_velocity_y, old_velocity_x, fastest_acc_x, fastest_acc_y, fastest_x, fastest_y, intervals;
+    var old_x, x, old_y, y, $selector, replace_old_positions, velocity_y, velocity_x, acc_x, acc_y, old_velocity_y, old_velocity_x,
+        fastest_acc_x, fastest_acc_y, fastest_x, fastest_y, intervals, avg_velocity_x, avg_velocity_y;
 
-    fastest_x = 0, fastest_y = 0, fastest_acc_x = 0, fastest_acc_y = 0;
+    fastest_x = 0, fastest_y = 0, fastest_acc_x = 0, fastest_acc_y = 0, avg_velocity_x = 0, avg_velocity_y = 0;
     replace_old_positions = true;
 
 //    $selector = $(options.selector);
@@ -27,6 +28,8 @@ var Mouse = function(options){
         if(velocity_y > fastest_y){
             fastest_y = velocity_y;
         }
+
+        avg_velocity_x = avg(intervals, avg_velocity_x, )
 
         $('#vel').empty().append(velocity_x + ", " + velocity_y);
         $("#fastest_vel").empty().append(fastest_x + ", " + fastest_y);
